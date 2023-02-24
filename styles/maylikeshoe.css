@@ -1,0 +1,21 @@
+.product-card-container-cart-shoe{
+    cursor: pointer;
+    color: #000000;
+   border: 1px solid white;
+   box-sizing: border-box;
+   padding: 20px;
+   padding-top: 0;
+   min-width: 300px;
+   padding: 10px;
+   padding-bottom: 60px;
+}
+
+.product-card{
+    padding: 20px;
+}
+
+#more-like-this-text-shoe{
+    text-align: left;
+    font-size: 30px;
+}
+
