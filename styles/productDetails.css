@@ -77,8 +77,8 @@
     border-radius: 15px;
      background-color: #ebebeb;
     width: 100%;
-    max-width: 810px;
-    max-height:  810px;
+    max-width: 610px;
+    max-height:  610px;
     cursor: pointer;
     transition: .3s ease-in-out; 
     margin: auto;

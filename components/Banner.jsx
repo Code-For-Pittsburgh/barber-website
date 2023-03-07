@@ -4,55 +4,30 @@ import { urlFor } from '../lib/client';
 const Banner = ({ information }) => {
   return (
     <>
+      <section className="py-24 md:py-40 bg-gray-100">
+        <div className="container px-4 mx-auto">
 
-
-      <section className="relative py-32 overflow-hidden">
-        <div className="container mx-auto px-4">
-          <div className="pt-16 px-16 bg-gradient-cyan2 rounded-2xl">
-            <div className="flex flex-wrap items-center -m-6 pb-16">
-              <div className="w-auto lg:w-1/2 p-6">
-                <div className="lg:max-w-md">
-                  <h2 className="mb-6 font-heading font-semibold text-6xl sm:text-7xl text-gray-900">{information.bigText}</h2>
-                  <p className="mb-10 text-gray-600 text-base">{information.smalltext}</p>
-                  <div className="flex flex-wrap -m-1.5">
-                    <div className="w-full lg:w-auto p-1.5">
-                      <button className="group relative font-heading px-6 py-4 w-full lg:w-auto uppercase text-white text-xs font-semibold bg-gray-900 overflow-hidden rounded-md tracking-px">
-                        <div className="absolute top-0 left-0 transform -translate-x-full group-hover:-translate-x-0 h-full w-full transition ease-in-out duration-500 bg-gray-800" />
-                        <p className="relative z-10">Explore</p>
-                      </button>
-                    </div>
-                    <div className="w-full lg:w-auto p-1.5">
-                      <button className="font-heading px-6 py-4 w-full lg:w-auto uppercase text-gray-900 text-xs font-semibold bg-white hover:bg-gray-50 rounded-md tracking-px">Learn more</button>
-                    </div>
-                  </div>
+          <div className="flex flex-wrap -mx-4">
+            <div className="w-full lg:w-1/2 px-4 mb-14 lg:mb-0">
+              <img className="block mx-auto" src={urlFor(information.image)} alt="" />
+            </div>
+            <div className="w-full lg:w-1/2 px-4">
+              <div className="max-w-lg mx-auto">
+                <div className="mb-12">
+                  <span className="inline-block px-5 py-2 mr-6 text-sm bg-white rounded-full">News</span>
+                  <span className="font-light text-sm text-gray-700">January 13, 2022</span>
                 </div>
-              </div>
-              <div className="w-auto lg:w-1/2 p-6">
-                <img className="mx-auto transform hover:-translate-x-24 transition ease-in-out duration-500" src={urlFor(information.image)} alt="" />
+                <h2 className="font-heading text-4xl sm:text-5xl mb-10">
+                  {information.bigText}
+                </h2>
+                <p className="max-w-md font-light mb-8">{console.log(information)}</p>
+                <div className="mb-16"><a className="inline-block mr-6 text-indigo-500 hover:text-indigo-600" href="#">#interiodesign</a><a className="inline-block mr-6 text-indigo-500 hover:text-indigo-600" href="#">#design</a><a className="inline-block text-indigo-500 hover:text-indigo-600" href="#">#application</a></div>
+                <a className="inline-block w-full sm:w-auto px-7 py-4 text-center font-medium bg-indigo-500 hover:bg-indigo-600 text-white rounded transition duration-250" href="#">Learn More</a>
               </div>
             </div>
-            <ul className="flex flex-wrap w-full border-t border-white border-opacity-30 justify-center">
-              <li className="p-3.5 lg:p-7 flex items-center font-heading font-semibold text-lg text-gray-900">
-                <p>No hidden feels</p>
-              </li>
-              <li className="p-3.5 lg:p-7 flex items-center font-heading font-semibold text-lg text-gray-900">
-                <p>Made Local</p>
-              </li>
-              <li className="p-3.5 lg:p-7 flex items-center font-heading font-semibold text-lg text-gray-900">
-                <p>All handcrafted</p>
-              </li>
-              <li className="p-3.5 lg:p-7 flex items-center font-heading font-semibold text-lg text-gray-900">
-                <p>Secured payment</p>
-              </li>
-            </ul>
           </div>
         </div>
       </section>
-
-
-
-
-
 
     </>
 
