@@ -7,7 +7,7 @@ import Navbar from './Navbar';
 const Layout = ({ children }) => {
   return (
     <div id='layout' className="layout">
-            <Navbar></Navbar>
+      <Navbar />
       <Head>
         <title>Bekware</title>
       </Head>
