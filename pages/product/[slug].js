@@ -13,6 +13,8 @@ import { motion, AnimateSharedLayout } from "framer-motion";
 import { useStateContext } from "../../context/StateContext";
 import { toast } from "react-hot-toast";
 import Image from "next/image";
+import ProductBasicDetails from "../../components/singleproduct/ProductView";
+import Features from "../../components/singleproduct/Features";
 function Item({ color, isSelected, onClick }) {
   return (
     <li className="item" onClick={onClick}>
@@ -35,214 +37,7 @@ const spring = {
   damping: 30,
 };
 
-const features = [
-  { name: "Origin", description: "Designed by Good Goods, Inc." },
-  {
-    name: "Material",
-    description:
-      "Solid walnut base with rare earth magnets and powder coated steel card cover",
-  },
-  { name: "Dimensions", description: '6.25" x 3.55" x 1.15"' },
-  { name: "Finish", description: "Hand sanded and finished with natural oil" },
-  { name: "Includes", description: "Wood card tray and 3 refill packs" },
-  {
-    name: "Considerations",
-    description:
-      "Made from natural materials. Grain and color vary with each item.",
-  },
-];
-
-function Example() {
-  return (
-    <div className="bg-white">
-      <div className="mx-auto grid max-w-2xl grid-cols-1 items-center gap-y-16 gap-x-8 py-24 px-4 sm:px-6 sm:py-32 lg:max-w-7xl lg:grid-cols-2 lg:px-8">
-        <div>
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Technical Specifications
-          </h2>
-          <p className="mt-4 text-gray-500">
-            The walnut wood card tray is precision milled to perfectly fit a
-            stack of Focus cards. The powder coated steel divider separates
-            active cards from new ones, or can be used to archive important task
-            lists.
-          </p>
-
-          <dl className="mt-16 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 sm:gap-y-16 lg:gap-x-8">
-            {features.map((feature) => (
-              <div key={feature.name} className="border-t border-gray-200 pt-4">
-                <dt className="font-medium text-gray-900">{feature.name}</dt>
-                <dd className="mt-2 text-sm text-gray-500">
-                  {feature.description}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-        <div className="grid grid-cols-2 grid-rows-2 gap-4 sm:gap-6 lg:gap-8">
-          <img
-            src="https://tailwindui.com/img/ecommerce-images/product-feature-03-detail-01.jpg"
-            alt="Walnut card tray with white powder coated steel divider and 3 punchout holes."
-            className="rounded-lg bg-gray-100"
-          />
-          <img
-            src="https://tailwindui.com/img/ecommerce-images/product-feature-03-detail-02.jpg"
-            alt="Top down view of walnut card tray with embedded magnets and card groove."
-            className="rounded-lg bg-gray-100"
-          />
-          <img
-            src="https://tailwindui.com/img/ecommerce-images/product-feature-03-detail-03.jpg"
-            alt="Side of walnut card tray with card groove and recessed card area."
-            className="rounded-lg bg-gray-100"
-          />
-          <img
-            src="https://tailwindui.com/img/ecommerce-images/product-feature-03-detail-04.jpg"
-            alt="Walnut card tray filled with cards and card angled in dedicated groove."
-            className="rounded-lg bg-gray-100"
-          />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const ProductDetails = ({ product, products }) => {
-  const { image, name, details, price, description } = product;
-  const [index, setIndex] = useState(0);
-  const [selectedSize, newSize] = useState(0);
-  const [selected, setSelected] = useState(0);
-  const { setQty, qty, onAdd, setShowCart } = useStateContext();
-  const shoesizelist = product.sizelist;
-
-  let unique = [...new Set(shoesizelist)];
-
-  const handleBuyNow = () => {
-    if (checkifSize()) {
-      setShowCart(true);
-      document.getElementById("main-container").classList.remove("disablez");
-    } else {
-      console.log("nope");
-      allmove();
-      toast.error("Please select a size");
-    }
-  };
-
-  function checkifSize() {
-    if (selected === 0) {
-      allmove();
-      toast.error("Please select a size");
-      return false;
-    } else {
-      onAdd(product, selectedSize);
-      setSelected(0);
-      return true;
-    }
-  }
-
-  function allmove() {
-    const abox = document.getElementById("animated-shoe-size");
-    abox.classList.toggle("move");
-  }
-
-  return (
-    <div>
-      <div id="productdeatilscontainer" className="product-detail-container">
-        <div>
-          <div className="image-container">
-            <img
-              src={urlFor(image && image[index])}
-              className="product-detail-image"
-            />
-          </div>
-          <div className="small-images-container">
-            {image?.map((item, i) => (
-              <img
-                key={i}
-                src={urlFor(item)}
-                className={
-                  i === index ? "small-image selected-image" : "small-image"
-                }
-                onMouseEnter={() => setIndex(i)}
-              />
-            ))}
-          </div>
-          <Examplez />
-        </div>
-
-        <Example />
-
-        <div className="product-details-recomandations-container">
-          <div className="product-details-recomandations-card-container">
-            {products.map((item) => (
-              <MayShoecard key={item._id} product={item} />
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export const getStaticPaths = async () => {
-  const query = `*[_type == "product"] {
-    slug {
-      current
-    }
-  }
-  `;
-
-  const products = await client.fetch(query);
-
-  const paths = products.map((product) => ({
-    params: {
-      slug: product.slug.current,
-    },
-  }));
-
-  return {
-    paths,
-    fallback: "blocking",
-  };
-};
-
-export const getStaticProps = async ({ params: { slug } }) => {
-  const query = `*[_type == "product" && slug.current == '${slug}'][0]`;
-  const productsQuery = '*[_type == "product"]';
-  const product = await client.fetch(query);
-  const products = await client.fetch(productsQuery);
-
-  console.log(product);
-
-  return {
-    props: { products, product },
-  };
-};
-
-export default ProductDetails;
-
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    theme: {
-      extend: {
-        gridTemplateRows: {
-          '[auto,auto,1fr]': 'auto auto 1fr',
-        },
-      },
-    },
-    plugins: [
-      // ...
-      require('@tailwindcss/aspect-ratio'),
-    ],
-  }
-  ```
-*/
-import { StarIcon } from "@heroicons/react/20/solid";
-
-const product = {
+const productz = {
   name: "Basic Tee 6-Pack",
   price: "$192",
   href: "#",
@@ -294,121 +89,200 @@ const product = {
   details:
     'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
 };
-const reviews = { href: "#", average: 4, totalCount: 117 };
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+const ProductDetails = ({ product, products }) => {
+  const {
+    image,
+    name,
+    details,
+    price,
+    features,
+    body,
+    specificationsDescription,
+  } = product;
+  const [index, setIndex] = useState(0);
+  const [selectedSize, newSize] = useState(0);
+  const [selected, setSelected] = useState(0);
+  const { setQty, qty, onAdd, setShowCart } = useStateContext();
+  const shoesizelist = product.sizelist;
 
-function Examplez() {
+  let unique = [...new Set(shoesizelist)];
+
+  const handleBuyNow = () => {
+    if (checkifSize()) {
+      setShowCart(true);
+      document.getElementById("main-container").classList.remove("disablez");
+    } else {
+      console.log("nope");
+      allmove();
+      toast.error("Please select a size");
+    }
+  };
+
+  function checkifSize() {
+    if (selected === 0) {
+      allmove();
+      toast.error("Please select a size");
+      return false;
+    } else {
+      onAdd(product, selectedSize);
+      setSelected(0);
+      return true;
+    }
+  }
+
+  function allmove() {
+    const abox = document.getElementById("animated-shoe-size");
+    abox.classList.toggle("move");
+  }
+
+  return (
+    <div>
+      <div id="productdeatilscontainer" className="product-detail-container">
+        <div className="grid lg:grid-cols-2 lg:items-start">
+          <div>
+            <div className="image-container">
+              <img
+                src={urlFor(image && image[index])}
+                className="product-detail-image"
+              />
+            </div>
+            <div className="small-images-container">
+              {image?.map((item, i) => (
+                <img
+                  key={i}
+                  src={urlFor(item)}
+                  className={
+                    i === index ? "small-image selected-image" : "small-image"
+                  }
+                  onMouseEnter={() => setIndex(i)}
+                />
+              ))}
+            </div>
+          </div>
+          <ProductBasicDetails
+            price={price}
+            name={name}
+            product={productz}
+            body={body}
+          />
+        </div>
+        <Features
+          features={features}
+          images={image}
+          description={specificationsDescription}
+        />
+
+        <MoreLikeThis />
+
+        <div className="product-details-recomandations-container">
+          <div className="product-details-recomandations-card-container">
+            {products.map((item) => (
+              <MayShoecard key={item._id} product={item} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const getStaticPaths = async () => {
+  const query = `*[_type == "product"] {
+    slug {
+      current
+    }
+  }
+  `;
+
+  const products = await client.fetch(query);
+
+  const paths = products.map((product) => ({
+    params: {
+      slug: product.slug.current,
+    },
+  }));
+
+  return {
+    paths,
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps = async ({ params: { slug } }) => {
+  const query = `*[_type == "product" && slug.current == '${slug}'][0]`;
+  const productsQuery = '*[_type == "product"]';
+  const product = await client.fetch(query);
+  const products = await client.fetch(productsQuery);
+
+  return {
+    props: { products, product },
+  };
+};
+
+export default ProductDetails;
+
+/*
+  This example requires some changes to your config:
+  
+  ```
+  // tailwind.config.js
+  module.exports = {
+    // ...
+    plugins: [
+      // ...
+      require('@tailwindcss/aspect-ratio'),
+    ],
+  }
+  ```
+*/
+const products = [
+  {
+    id: 1,
+    name: "Basic Tee",
+    href: "#",
+    imageSrc:
+      "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
+    imageAlt: "Front of men's Basic Tee in black.",
+    price: "$35",
+    color: "Black",
+  },
+  // More products...
+];
+function MoreLikeThis() {
   return (
     <div className="bg-white">
-      <div className="">
-        {/* Image gallery */}
+      <div className="mx-auto max-w-2xl py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+        <h2 className="text-2xl font-bold tracking-tight text-gray-900">
+          Customers also purchased
+        </h2>
 
-        {/* Product info */}
-        <div className="mx-auto max-w-2xl px-4 pb-16 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pt-16 lg:pb-24">
-          <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-              {product.name}
-            </h1>
-          </div>
-
-          {/* Options */}
-          <div className="mt-4 lg:row-span-3 lg:mt-0">
-            <h2 className="sr-only">Product information</h2>
-            <p className="text-3xl tracking-tight text-gray-900">
-              {product.price}
-            </p>
-
-            {/* Reviews */}
-            <div className="mt-6">
-              <h3 className="sr-only">Reviews</h3>
-              <div className="flex items-center">
-                <div className="flex items-center">
-                  {[0, 1, 2, 3, 4].map((rating) => (
-                    <StarIcon
-                      key={rating}
-                      className={classNames(
-                        reviews.average > rating
-                          ? "text-gray-900"
-                          : "text-gray-200",
-                        "h-5 w-5 flex-shrink-0"
-                      )}
-                      aria-hidden="true"
-                    />
-                  ))}
+        <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+          {products.map((product) => (
+            <div key={product.id} className="group relative">
+              <div className="min-h-80 aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:aspect-none lg:h-80">
+                <img
+                  src={product.imageSrc}
+                  alt={product.imageAlt}
+                  className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+                />
+              </div>
+              <div className="mt-4 flex justify-between">
+                <div>
+                  <h3 className="text-sm text-gray-700">
+                    <a href={product.href}>
+                      <span aria-hidden="true" className="absolute inset-0" />
+                      {product.name}
+                    </a>
+                  </h3>
+                  <p className="mt-1 text-sm text-gray-500">{product.color}</p>
                 </div>
-                <p className="sr-only">{reviews.average} out of 5 stars</p>
-                <a
-                  href={reviews.href}
-                  className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500"
-                >
-                  {reviews.totalCount} reviews
-                </a>
+                <p className="text-sm font-medium text-gray-900">
+                  {product.price}
+                </p>
               </div>
             </div>
-
-            <form className="mt-10">
-              {/* Colors */}
-              <div>
-                <h3 className="text-sm font-medium text-gray-900">Color</h3>
-              </div>
-
-              {/* Sizes */}
-              <div className="mt-10">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-medium text-gray-900">Size</h3>
-                  <a
-                    href="#"
-                    className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
-                  >
-                    Size guide
-                  </a>
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-              >
-                Add to bag
-              </button>
-            </form>
-          </div>
-
-          <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pt-6 lg:pb-16 lg:pr-8">
-            {/* Description and details */}
-            <div>
-              <h3 className="sr-only">Description</h3>
-
-              <div className="space-y-6">
-                <p className="text-base text-gray-900">{product.description}</p>
-              </div>
-            </div>
-
-            <div className="mt-10">
-              <h3 className="text-sm font-medium text-gray-900">Highlights</h3>
-
-              <div className="mt-4">
-                <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
-                  {product.highlights.map((highlight) => (
-                    <li key={highlight} className="text-gray-400">
-                      <span className="text-gray-600">{highlight}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            <div className="mt-10">
-              <h2 className="text-sm font-medium text-gray-900">Details</h2>
-
-              <div className="mt-4 space-y-6">
-                <p className="text-sm text-gray-600">{product.details}</p>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>
