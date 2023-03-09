@@ -8,7 +8,7 @@ const Product = ({ product: { image, name, slug, price } }) => {
     <>
       <Link href={`/product/${slug.current}`}>
         <div key={name} className="group">
-          <div className=" h-96 w-full overflow-hidden rounded-lg bg-white group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1">
+          <div className=" h-96 w-full overflow-hidden rounded-lg bg-white group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1  lg:aspect-w-1 lg:aspect-h-1">
             <img
               src={urlFor(image && image[0])}
               alt={name}

@@ -3,36 +3,21 @@ import Link from 'next/link';
 import { AiOutlineMinus, AiOutlinePlus, AiOutlineLeft, AiOutlineShopping } from 'react-icons/ai';
 import { TiDeleteOutline } from 'react-icons/ti';
 import toast from 'react-hot-toast';
+import { useCart } from 'react-use-cart';
+import { urlFor } from '../lib/client';
 
 import { useStateContext } from '../context/StateContext';
-import { urlFor } from '../lib/client';
 import getStripe from '../lib/getStripe';
+import { getURL } from 'next/dist/shared/lib/utils';
 
 const Cart = () => {
 
 
   const cartRef = useRef();
   const { totalPrice, totalQuantities, cartItems, setShowCart, qty, toggleCartItemQuanitity, onRemove } = useStateContext();
+  const { isEmpty, totalUniqueItems, items, updateItemQuantity, removeItem, emptyCart } = useCart();
 
-  const handleCheckout = async () => {
-    const stripe = await getStripe();
 
-    const response = await fetch('/api/stripe', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(cartItems),
-    });
-
-    if (response.statusCode === 500) return;
-
-    const data = await response.json();
-
-    toast.loading('Loading...');
-
-    stripe.redirectToCheckout({ sessionId: data.id });
-  }
 
 
   return (
@@ -62,35 +47,55 @@ export default Cart
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import { CartProvider } from 'react-use-cart'
 
-const products = [
-  {
-    id: 1,
-    name: 'Throwback Hip Bag',
-    href: '#',
-    color: 'Salmon',
-    price: '$90.00',
-    quantity: 1,
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg',
-    imageAlt: 'Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.',
-  },
-  {
-    id: 2,
-    name: 'Medium Stuff Satchel',
-    href: '#',
-    color: 'Blue',
-    price: '$32.00',
-    quantity: 1,
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg',
-    imageAlt:
-      'Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.',
-  },
-  // More products...
-]
+
 
 function Example() {
   const [open, setOpen] = useState(true)
-  const { showCart, totalQuantities, cartItems, setShowCart, qty, toggleCartItemQuanitity, onRemove } = useStateContext();
+  const {
+    isEmpty,
+    totalUniqueItems,
+    items,
+    updateItemQuantity,
+    removeItem,
+  } = useCart();
+
+  const {
+    setShowCart, showCart, cartItems, qty, toggleCartItemQuanitity, onRemove,
+  } = useStateContext();
+
+  const products = items
+
+  function getTotalPrice(products) {
+    let total = 0;
+    for (let i = 0; i < products.length; i++) {
+      total += products[i].price * products[i].quantity;
+    }
+    return total;
+  }
+
+
+  const handleCheckout = async () => {
+    const stripe = await getStripe();
+
+    const response = await fetch('/api/stripe', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(products),
+    });
+
+    if (response.statusCode === 500) return;
+
+    const data = await response.json();
+
+    toast.loading('Loading...');
+
+    stripe.redirectToCheckout({ sessionId: data.id });
+  }
+
 
   return (
     <Transition.Root show={showCart} as={Fragment}>
@@ -106,6 +111,8 @@ function Example() {
         >
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
         </Transition.Child>
+
+
 
         <div className="fixed inset-0 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
@@ -139,14 +146,16 @@ function Example() {
                       <div className="mt-8">
                         <div className="flow-root">
                           <ul role="list" className="-my-6 divide-y divide-gray-200">
+
                             {products.map((product) => (
                               <li key={product.id} className="flex py-6">
                                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                   <img
-                                    src={product.imageSrc}
+                                    src={urlFor(product?.image[0])}
                                     alt={product.imageAlt}
                                     className="h-full w-full object-cover object-center"
                                   />
+
                                 </div>
 
                                 <div className="ml-4 flex flex-1 flex-col">
@@ -164,6 +173,9 @@ function Example() {
 
                                     <div className="flex">
                                       <button
+                                        onClick={() => {
+                                          removeItem(product.id);
+                                        }}
                                         type="button"
                                         className="font-medium text-indigo-600 hover:text-indigo-500"
                                       >
@@ -182,25 +194,28 @@ function Example() {
                     <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                       <div className="flex justify-between text-base font-medium text-gray-900">
                         <p>Subtotal</p>
-                        <p>$262.00</p>
+                        <p>{
+                          getTotalPrice(products)
+                        }</p>
                       </div>
                       <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                       <div className="mt-6">
-                        <a
-                          href="#"
-                          className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                        <button
+                          onClick={handleCheckout}
+                          className="flex items-center w-full justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                         >
                           Checkout
-                        </a>
+                        </button>
                       </div>
                       <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                         <p>
-                          or
+                          or {' '}
                           <button
                             type="button"
                             className="font-medium text-indigo-600 hover:text-indigo-500"
                             onClick={() => setShowCart()}
                           >
+
                             Continue Shopping
                             <span aria-hidden="true"> &rarr;</span>
                           </button>

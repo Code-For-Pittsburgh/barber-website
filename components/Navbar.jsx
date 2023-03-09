@@ -4,10 +4,20 @@ import { AiOutlineShopping } from 'react-icons/ai'
 import Image from 'next/image'
 import { useStateContext } from '../context/StateContext';
 import { Cart } from './';
+import { CartProvider, useCart } from "react-use-cart";
+
+
 
 const Navbar = () => {
 
-  const { showCart, setShowCart, totalQuantities } = useStateContext();
+  const { showCart, setShowCart, totalQuantities, items } = useStateContext();
+  const {
+    isEmpty,
+    totalUniqueItems,
+    updateItemQuantity,
+    removeItem,
+  } = useCart();
+
 
 
   const [open, setOpen] = useState(false)
@@ -58,9 +68,12 @@ const Navbar = () => {
                   <div className="space-y-6 border-t border-gray-200 py-6 px-4">
                     {navigation.pages.map((page) => (
                       <div key={page.name} className="flow-root">
-                        <a href={page.href} className="-m-2 block p-2 font-medium text-gray-900">
-                          {page.name}
-                        </a>
+                        <Link href={page.href}>
+                          <a href={page.href} className="-m-2 block p-2 font-medium text-gray-900">
+                            {page.name}
+                          </a>
+                        </Link>
+
                       </div>
                     ))}
                   </div>
@@ -75,9 +88,7 @@ const Navbar = () => {
         </Transition.Root>
 
         <header className="relative bg-white">
-          <p className="flex h-10 items-center justify-center bg-indigo-600 px-4 text-sm font-medium text-white sm:px-6 lg:px-8">
-            Get free delivery on orders over $100
-          </p>
+
 
           <nav aria-label="Top" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="border-b border-gray-200">
@@ -93,22 +104,24 @@ const Navbar = () => {
 
                 {/* Logo */}
                 <div className="ml-4 flex lg:ml-0">
-                  <a href="#">
-                    <span className="sr-only">Your Company</span>
-                    <img
-                      className="h-8 w-auto"
-                      src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                      alt=""
-                    />
-                  </a>
+                  <Link href='/'>
+                    <>
+                      <span className="sr-only">Your Company</span>
+                      <img
+                        className="h-8 w-auto"
+                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                        alt=""
+                      />
+                    </>
+
+                  </Link>
+
                 </div>
 
                 {/* Flyout menus */}
                 <Popover.Group className="hidden lg:ml-8 lg:block lg:self-stretch">
                   <div className="flex h-full space-x-8">
-                    {navigation.categories.map((category) => (
-                      <></>
-                    ))}
+
 
                     {navigation.pages.map((page) => (
                       <a
@@ -133,6 +146,9 @@ const Navbar = () => {
                       <MagnifyingGlassIcon className="h-6 w-6" aria-hidden="true" />
                     </a>
                   </div>
+                  <button>
+
+                  </button>
 
                   {/* Cart */}
                   <div className="ml-4 flow-root lg:ml-6">
@@ -142,7 +158,7 @@ const Navbar = () => {
                         aria-hidden="true"
                         onClick={() => setShowCart(true)}
                       />
-                      <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">{totalQuantities}</span>
+                      <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">{items.length}</span>
                       <span className="sr-only">items in cart, view bag</span>
                     </a>
                   </div>
@@ -303,7 +319,7 @@ const navigation = {
     },
   ],
   pages: [
-    { name: 'Home', href: '#' },
+    { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
     { name: 'Contact', href: '/contact' },
 

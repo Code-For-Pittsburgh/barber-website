@@ -1,9 +1,15 @@
 import React from "react";
 import { PortableText } from "@portabletext/react";
+import { CartProvider, useCart } from "react-use-cart";
+import { urlFor } from "../../lib/client";
+
 
 export default function ProductBasicDetails(props) {
     const product = props.product;
     const { name, price, details, highlights, body } = props;
+    const { addItem } = useCart();
+    const { Items } = useCart();
+
 
     return (
         <div className="bg-white">
@@ -41,13 +47,29 @@ export default function ProductBasicDetails(props) {
                         <div className="mt-10">
                             <div className="grid grid-cols-2 items-space gap-10">
                                 <button
-                                    type="submit"
+                                    onClick={() => {
+
+                                        console.log(
+                                            'added'
+                                        )
+
+
+                                        addItem(
+                                            {
+                                                id: product._id,
+                                                name: product.name,
+                                                price: product.price,
+                                                image: product.image,
+                                                quantity: 1
+
+                                            }
+                                        )
+                                    }}
                                     className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                 >
                                     Add to bag
                                 </button>
                                 <button
-                                    type="submit"
                                     className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                 >
                                     Checkout
