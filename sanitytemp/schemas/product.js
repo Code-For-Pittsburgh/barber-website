@@ -26,6 +26,14 @@ export default {
       },
     },
     {
+      name: "shortDescription",
+      title: "Short Description",
+      type: "text",
+      options: {
+        maxLength: 100,
+      },
+    },
+    {
       name: "Desc",
       title: "Desc",
       type: "array",

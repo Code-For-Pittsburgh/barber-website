@@ -6,14 +6,14 @@ import Navbar from './Navbar';
 
 const Layout = ({ children }) => {
   return (
-    <div id='layout' className="layout">
+    <div>
       <Navbar />
       <Head>
         <title>Bekware</title>
       </Head>
       <header>
       </header>
-      <main id='main-container' className="main-container">
+      <main>
         {children}
       </main>
       <footer>

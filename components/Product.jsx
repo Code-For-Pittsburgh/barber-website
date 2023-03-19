@@ -3,27 +3,43 @@ import React from 'react';
 import Link from 'next/link';
 import { urlFor } from '../lib/client';
 
-const Product = ({ product: { image, name, slug, price } }) => {
+const Product = ({ product: { image, name, slug, price, shortDescription } }) => {
   return (
     <>
       <Link href={`/product/${slug.current}`}>
-        <div key={name} className="group">
-          <div className=" h-96 w-full overflow-hidden rounded-lg bg-white group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1  lg:aspect-w-1 lg:aspect-h-1">
+        <a href="#" className="group relative block ">
+          <div className="relative h-[350px] bg-black sm:h-[450px]">
             <img
               src={urlFor(image && image[0])}
-              alt={name}
-              className="h-full w-full object-cover object-center"
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover opacity-100 group-hover:opacity-0"
+            />
+
+            <img
+              src={urlFor(image && image[1])}
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover opacity-0 group-hover:opacity-100"
             />
           </div>
-          <h3 className="mt-6 text-xl">
-            <span className=" inset-0" />
-            ${price}
-          </h3>
-          <p className="text-xl font-semibold text-gray-900">
-            {name}
-          </p>
 
-        </div>
+          <div className="absolute bg-gradient-cover inset-0 flex flex-col items-start justify-end p-6">
+            <h3 className="text-3xl text-white">
+              {
+                name
+              }
+            </h3>
+            <p className="mt-1 text-3xl text-white">
+              ${
+                price
+              }
+            </p>
+
+
+
+          </div>
+
+        </a>
+
       </Link>
     </>
 

@@ -20,7 +20,6 @@ const Banner = ({ information }) => {
                 <h2 className="font-heading text-4xl sm:text-5xl mb-10">
                   {information.bigText}
                 </h2>
-                <p className="max-w-md font-light mb-8">{console.log(information)}</p>
                 <div className="mb-16"><a className="inline-block mr-6 text-indigo-500 hover:text-indigo-600" href="#">#interiodesign</a><a className="inline-block mr-6 text-indigo-500 hover:text-indigo-600" href="#">#design</a><a className="inline-block text-indigo-500 hover:text-indigo-600" href="#">#application</a></div>
                 <a className="inline-block w-full sm:w-auto px-7 py-4 text-center font-medium bg-indigo-500 hover:bg-indigo-600 text-white rounded transition duration-250" href="#">Learn More</a>
               </div>

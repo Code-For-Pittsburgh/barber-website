@@ -23,8 +23,10 @@ const Navbar = () => {
   const [open, setOpen] = useState(false)
 
   return (
-    <>
-      <div className="bg-white">
+    <div className='
+    max-w-7xl mx-auto
+    '>
+      <div className="bg-black ">
         {/* Mobile menu */}
         <Transition.Root show={open} as={Fragment}>
           <Dialog as="div" className="relative z-40 lg:hidden" onClose={setOpen}>
@@ -87,11 +89,11 @@ const Navbar = () => {
           </Dialog>
         </Transition.Root>
 
-        <header className="relative bg-white">
+        <header className="relative bg-black">
 
 
-          <nav aria-label="Top" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="border-b border-gray-200">
+          <nav aria-label="Top" className="mx-auto  px-4">
+            <div className="border-b border-zinc-900">
               <div className="flex h-16 items-center">
                 <button
                   type="button"
@@ -127,7 +129,7 @@ const Navbar = () => {
                       <a
                         key={page.name}
                         href={page.href}
-                        className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
+                        className="flex items-center text-base font-medium text-white hover:text-green-500"
                       >
                         {page.name}
                       </a>
@@ -158,7 +160,7 @@ const Navbar = () => {
                         aria-hidden="true"
                         onClick={() => setShowCart(true)}
                       />
-                      <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">{items.length}</span>
+                      <span className="ml-2 text-base font-medium text-white group-hover:text-green-500">{items.length}</span>
                       <span className="sr-only">items in cart, view bag</span>
                     </a>
                   </div>
@@ -172,7 +174,7 @@ const Navbar = () => {
         showCart && (
           <Cart />)
       }
-    </>
+    </div>
 
 
 
