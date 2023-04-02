@@ -78,5 +78,11 @@ export default {
       title: "Specifications Description",
       type: "text",
     },
+    {
+      name: "collection",
+      title: "Collection",
+      type: "reference",
+      to: [{ type: "collection" }],
+    },
   ],
 };
