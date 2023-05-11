@@ -208,7 +208,6 @@ flex-direction: column;
 }
 .flex h4{
   font-size: 20px;
-  text-align: right;
 }
 .total{
   display: flex;
