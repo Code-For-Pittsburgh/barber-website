@@ -44,7 +44,7 @@ const Home = ({ products, bannerData, giftData, categories }) => {
                 </div>
                 <div className="max-w-sm 2xl:ml-14">
                   <p className="font-medium text-white">
-                    "Introducing the 'Wildflower' Collection - a range of
+                    Introducing the &quotWildflower&quot Collection - a range of
                     clothing that celebrates the free-spirited and adventurous
                     nature of women. Inspired by the beauty and resilience of
                     wildflowers, this collection features a mix of
@@ -86,7 +86,7 @@ const Home = ({ products, bannerData, giftData, categories }) => {
             style={{ zIndex: 1 }}
           >
             <p className="text-xl font-medium text-white mb-7">
-              "Introducing the 'Wildflower' Collection
+              Introducing the &quotWildflower&quot Collection
             </p>
             <a
               className="group inline-flex items-center font-bold text-yellow-500 hover:text-yellow-600"
